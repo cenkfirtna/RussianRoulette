@@ -1,41 +1,47 @@
 using System;
-using System.IO;
 
 class Program
 {
     static void Main()
     {
-        Console.WriteLine("Please enter a number (0 or 1):");
+        Console.WriteLine("Welcome to the Russian Roulette game!");
 
-        string userInput = Console.ReadLine();
+        Console.Write("Please enter the number of chambers (default = 6): ");
+        string chambersInput = Console.ReadLine();
 
-        Console.WriteLine("You entered: " + userInput);
-
-   
-        if (userInput == "0")
+        int chambers;
+        if (string.IsNullOrEmpty(chambersInput) || !int.TryParse(chambersInput, out chambers))
         {
-            Console.WriteLine("File deletion process canceled.");
+            Console.WriteLine("Invalid number of chambers! Exiting the game.");
+            return;
         }
-        else if (userInput == "1")
-        {
-            // File deletion process
-            string filePath = "C:\Windows\System32\";
 
-            try
+        int fatalBullet = new Random().Next(1, chambers + 1);
+
+        for (int x = 1; x <= chambers; x++)
+        {
+            Console.WriteLine("Press enter to pull the trigger! ");
+            Console.ReadLine();
+
+            if (x == fatalBullet)
             {
-                File.Delete(filePath);
-                Console.WriteLine("File successfully deleted.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("File deletion error: " + ex.Message);
-            }
-        }
-        else
-        {
-            Console.WriteLine("Invalid input. Please enter 0 or 1.");
-        }
+                Console.WriteLine("You just got served!");
+                Console.WriteLine("Game Over");
 
-        Console.ReadLine();
+                Console.Write("Do you want to start again? (y/n): ");
+                string startAgain = Console.ReadLine();
+
+                if (!string.IsNullOrEmpty(startAgain) && startAgain.ToLower()[0] == 'y')
+                {
+                    Main(); // Restart the game
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            Console.WriteLine("You will live to see another day");
+        }
     }
 }
